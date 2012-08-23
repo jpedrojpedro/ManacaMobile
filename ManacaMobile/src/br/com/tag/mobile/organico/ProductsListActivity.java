@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,15 +16,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.Toast;
 import br.com.tag.mobile.httpRequest.GetProductsTask;
+import br.com.tag.mobile.httpRequest.GetProductsThumbTask;
 import br.com.tag.mobile.model.Product;
+import br.com.tag.mobile.organico.ProductArrayAdapter.ProductsViewHolder;
 
 import com.quietlycoding.android.picker.Picker;
 
-public class ProductsListActivity extends Activity
+public class ProductsListActivity extends Activity implements OnScrollListener
 {
 	private ListView showProducts;
     private ArrayList<Product> products;
@@ -106,18 +113,6 @@ public class ProductsListActivity extends Activity
 			ProductArrayAdapter messageAdapter = new ProductArrayAdapter(this, products);
 			this.showProducts.setAdapter(messageAdapter);
 		}
-		
-		//TODO: Start Inserting Thumbnail Images
-		
-		if ( isNetworkAvaiable(this) )
-		{
-			
-		}
-		else
-		{
-			Toast.makeText(this, "Não há conexão de rede disponível", Toast.LENGTH_SHORT).show();
-			finish();
-		}
 	}
 	
 	public static boolean isNetworkAvaiable ( Context context )
@@ -131,14 +126,35 @@ public class ProductsListActivity extends Activity
 			return false;
 	}
 	
-	public ListView getShowProducts()
-	{
-		return showProducts;
-	}
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount)
+	{}
 
-	public ArrayList<Product> getProducts()
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState)
 	{
-		return products;
+		int lastPosition, firstPosition;
+		if ( scrollState == SCROLL_STATE_IDLE )
+		{
+			firstPosition = view.getFirstVisiblePosition();
+			lastPosition = view.getLastVisiblePosition();
+			
+			for ( int i = firstPosition; i <= lastPosition; i++ )
+			{
+				if ( ProductsListActivity.isNetworkAvaiable(this) )
+				{
+					ProductsViewHolder p;
+					p = (ProductsViewHolder) this.showProducts.getTag(i);
+					new GetProductsThumbTask(this, p.imgName, i);
+				}
+			}
+		}
 	}
-
+	
+	public void setThumbImage ( int position, Bitmap img )
+	{
+		Drawable d = new BitmapDrawable(img);
+		this.showProducts.getChildAt(position).setBackgroundDrawable(d);
+	}
 }
