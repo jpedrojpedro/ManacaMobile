@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, MainActivity!</string>
+    <string name="app_name">Manaca Mobile</string>
+    <string name="btn_produtos">Produtos</string>
+    <string name="btn_historico">Histórico Compras</string>
+    <string name="btn_sobre">Sobre</string>
+    <string name="btn_insert">Adicionar</string>
+    <string name="btn_envio_pedidos">Enviar Pedidos</string>
+    <string name="alt_logo">Manacá Sabor da Serra - Logo</string>
+    <string name="num_product">nº \t</string>
+    <string name="amount_product">preço: \t R$ &#160;</string>
+    <string name="quantity_product">quantidade: \t</string>
+    <string name="quantity">Quantidade:</string>
+    <string name="shop_cart">Carrinho de Compras</string>
+    <string name="shop_cart_head">Carrinho de Compras nº \t</string>
+    <string name="image_descriptor">Imagem do Produto</string>
+    <string name="total">Total: \t R$ &#160;</string>
+    <string name="about_text">
+        <b>Nosso Objetivo:</b>
+        \n\n
+        Produzir e comercializar hortaliças, verduras, flores comestíveis e 
+        temperos, usando as técnicas de cultivo orgânico.
+        \n\n
+        <b>Quem Somos:</b>
+        \n\n
+        Cidadãos urbanos que tem um sítio na serra Fluminense há onze anos.
+        \n\n
+        As chuvas do verão de 2011, após a destruição e impacto que causaram, 
+        nos trouxeram a perspectiva de iniciar o cultivo de orgânicos em 
+        áreas abertas pela chuva.
+        \n\n
+        Mergulhamos na leitura de material sobre técnicas de cultivo de 
+        orgânicos, adubação e defensivos, além de conversas com especialistas.
+        \n\n
+        O cuidado com a natureza inerente a produção de orgânicos, aliado a terra 
+        virgem e água de nascente, foram fatores decisivos para que iniciássemos
+        nossa plantação, rompendo com a tradição da agricultura convencional na 
+        região.
+        \n\n
+        A escolha do que e onde plantar e a compra de sementes foram atividades
+        cheias de desafios, diversão e estórias para a posteridade.
+        \n\n
+        Iniciamos o cultivo em julho, e a terra tem se mostrado generosa. Com as 
+        chuvas de verão aprendemos a lidar com fungos e pragas, e a entender que 
+        algumas vezes eles não se comportam conforme o esperado.
+        \n\n
+        Cremos que o uso de compostagem, defensivos naturais à base de pimenta, 
+        sabão e fumo, caldas descobertas no século passado, ainda são eficazes 
+        contra pragas, fungos e bactérias.
+        \n\n
+        A entrega para parentes e amigos tem se mostrado auspiciosa e agora 
+        buscamos ampliar a comercialização, concentrando pedidos numa mesma 
+        região.
+        \n\n
+        Já estamos em processo para obter a certificação de produtos orgânicos.
+        \n\n
+        Cuidar da terra e produzir produtos saudáveis tem nos trazido prazer e 
+        alegrias, nos fica também sensação de retorno ao passado, quando o normal 
+        era consumir alimentos frescos e saborosos.
+    </string>
+
+</resources>
