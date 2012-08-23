@@ -42,7 +42,7 @@ public class QueryImage
 	}
 	catch (IOException e1)
 	{
-		Log.e("parseImage", "Error parsing image | LoadImage");
+		Log.e("thumbImage", "Error parsing image | LoadImage");
 	}
 		return bitmap;               
 	}
@@ -63,7 +63,7 @@ public class QueryImage
 		}
 		catch (Exception ex)
 		{
-			Log.e("parseImage", "Error parsing image | OpenHttpConnection");
+			Log.e("thumbImage", "Error parsing image | OpenHttpConnection");
 		}
 		return inputStream;
 	}

@@ -16,15 +16,13 @@
 package com.quietlycoding.android.picker;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import br.com.tag.mobile.handlers.AddItensToCartHandler;
 import br.com.tag.mobile.httpRequest.GetProductsImageTask;
+import br.com.tag.mobile.organico.ProductsListActivity;
 import br.com.tag.mobile.organico.R;
 
 public class Picker extends Activity
@@ -52,7 +50,7 @@ public class Picker extends Activity
         this.priceProd = getIntent().getFloatExtra("productPrice", 0);
         this.prodName = getIntent().getStringExtra("productName");
         this.typeProd = getIntent().getStringExtra("productType");
-        if ( isNetworkAvaiable() )
+        if ( ProductsListActivity.isNetworkAvaiable(this) )
 		{
         	System.out.println(imgName);
 			// call AsyncTask
@@ -64,17 +62,6 @@ public class Picker extends Activity
 		}
         this.addItenToCart.setOnClickListener(new AddItensToCartHandler(this));
     }
-    
-    private boolean isNetworkAvaiable ()
-	{
-		ConnectivityManager cm = (ConnectivityManager) 
-								 getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		if ( netInfo != null && netInfo.isConnected() )
-			return true;
-		else
-			return false;
-	}
 
 	public void setProductsImage ( Bitmap productImage )
 	{

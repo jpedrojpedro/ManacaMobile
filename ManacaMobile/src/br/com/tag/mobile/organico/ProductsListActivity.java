@@ -18,11 +18,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 import br.com.tag.mobile.httpRequest.GetProductsTask;
 import br.com.tag.mobile.model.Product;
+
 import com.quietlycoding.android.picker.Picker;
 
 public class ProductsListActivity extends Activity
 {
-    private ListView showProducts;
+	private ListView showProducts;
     private ArrayList<Product> products;
 	
 	@Override
@@ -31,7 +32,7 @@ public class ProductsListActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_product);
 		this.showProducts = (ListView) findViewById(R.id.listView);
-		if ( isNetworkAvaiable() )
+		if ( isNetworkAvaiable(this) )
 		{
 			// call AsyncTask
 			new GetProductsTask(this).execute();
@@ -105,16 +106,39 @@ public class ProductsListActivity extends Activity
 			ProductArrayAdapter messageAdapter = new ProductArrayAdapter(this, products);
 			this.showProducts.setAdapter(messageAdapter);
 		}
+		
+		//TODO: Start Inserting Thumbnail Images
+		
+		if ( isNetworkAvaiable(this) )
+		{
+			
+		}
+		else
+		{
+			Toast.makeText(this, "Não há conexão de rede disponível", Toast.LENGTH_SHORT).show();
+			finish();
+		}
 	}
 	
-	private boolean isNetworkAvaiable ()
+	public static boolean isNetworkAvaiable ( Context context )
 	{
 		ConnectivityManager cm = (ConnectivityManager) 
-								 getSystemService(Context.CONNECTIVITY_SERVICE);
+								 context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if ( netInfo != null && netInfo.isConnected() )
 			return true;
 		else
 			return false;
 	}
+	
+	public ListView getShowProducts()
+	{
+		return showProducts;
+	}
+
+	public ArrayList<Product> getProducts()
+	{
+		return products;
+	}
+
 }

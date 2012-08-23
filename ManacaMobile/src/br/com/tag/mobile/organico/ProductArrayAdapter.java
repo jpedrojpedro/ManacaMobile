@@ -1,11 +1,13 @@
 package br.com.tag.mobile.organico;
 
 import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import br.com.tag.mobile.model.Product;
 
@@ -34,10 +36,12 @@ public class ProductArrayAdapter extends ArrayAdapter<Product>
 		TextView tvId = (TextView) rowView.findViewById(R.id.productId);
 		TextView tvName = (TextView) rowView.findViewById(R.id.productName);
 		TextView tvAmount = (TextView) rowView.findViewById(R.id.amount);
+		ImageView imgThumb = (ImageView) rowView.findViewById(R.id.productImage);
 		
 		tvId.setText(String.valueOf(p.get_id()));
 		tvName.setText(p.getProductName());
 		tvAmount.setText(String.valueOf(p.getAmount()));
+		imgThumb.setId(R.drawable.no_image);
 		
 		return rowView;
 	}
