@@ -44,6 +44,10 @@ public class QueryImage
 	{
 		Log.e("thumbImage", "Error parsing image | LoadImage");
 	}
+	catch (Exception e)
+	{
+		Log.e("thumbImage", "ERROR: " + e.toString());
+	}
 		return bitmap;               
 	}
 

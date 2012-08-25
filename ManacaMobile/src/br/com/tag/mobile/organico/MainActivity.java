@@ -1,8 +1,6 @@
 package br.com.tag.mobile.organico;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,9 +20,6 @@ public class MainActivity extends Activity
         Button btnSobre = (Button) findViewById(R.id.btnSobre);
         btnProdutos.setOnClickListener(new ShowProductsHandler(this));
         btnSobre.setOnClickListener(new ShowAboutHandler(this));
-        if ( !this.isMyServiceRunning() )
-        	startService( new Intent(MainActivity.this, 
-        				  br.com.tag.mobile.service.UpdateInformation.class) );
     }
     
     @Override
@@ -53,16 +48,5 @@ public class MainActivity extends Activity
 	        });
 	        AlertDialog alert = builder.create();
 	        alert.show();
-	}
-    
-    private boolean isMyServiceRunning()
-	{
-	    ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
-	    {
-	        if ("br.com.tag.mobile.service.UpdateInformation".equals(service.service.getClassName()))
-	            return true;
-	    }
-	    return false;
 	}
 }

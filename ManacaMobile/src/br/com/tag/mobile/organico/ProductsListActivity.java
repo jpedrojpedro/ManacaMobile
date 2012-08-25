@@ -1,6 +1,7 @@
 package br.com.tag.mobile.organico;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -18,17 +20,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 import br.com.tag.mobile.httpRequest.GetProductsTask;
 import br.com.tag.mobile.httpRequest.GetProductsThumbTask;
 import br.com.tag.mobile.model.Product;
 import br.com.tag.mobile.organico.ProductArrayAdapter.ProductsViewHolder;
-
 import com.quietlycoding.android.picker.Picker;
 
-public class ProductsListActivity extends Activity implements OnScrollListener
+public class ProductsListActivity extends Activity implements OnScrollListener, 
+															  OnItemClickListener
 {
 	private ListView showProducts;
     private ArrayList<Product> products;
@@ -39,6 +42,8 @@ public class ProductsListActivity extends Activity implements OnScrollListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_product);
 		this.showProducts = (ListView) findViewById(R.id.listView);
+		this.showProducts.setOnScrollListener(this);
+		this.showProducts.setOnItemClickListener(this);
 		if ( isNetworkAvaiable(this) )
 		{
 			// call AsyncTask
@@ -84,34 +89,20 @@ public class ProductsListActivity extends Activity implements OnScrollListener
 		menu.add("Adicionar ao Carrinho...");
 	}
 	
-	@Override
-	public boolean onContextItemSelected(MenuItem item)
-	{
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		
-		if ( item.getTitle().equals("Adicionar ao Carrinho...") )
-		{
-			Intent i = new Intent(ProductsListActivity.this, Picker.class);
-			i.putExtra("imageName", this.products.get(info.position).getImageName());
-			i.putExtra("productId", this.products.get(info.position).get_id());
-			i.putExtra("productPrice", this.products.get(info.position).getAmount());
-			i.putExtra("productName", this.products.get(info.position).getProductName());
-			i.putExtra("productType", this.products.get(info.position).getProductTypeName());
-        	startActivity(i);
-		}
-		else
-			return false;
-		
-		return true;
-	}
-	
 	public void populateListView ( ArrayList<Product> products )
 	{
 		if ( products != null )
 		{
 			this.products = products;
-			ProductArrayAdapter messageAdapter = new ProductArrayAdapter(this, products);
-			this.showProducts.setAdapter(messageAdapter);
+			ProductArrayAdapter productAdapter = new ProductArrayAdapter(this, products);
+			productAdapter.sort(new Comparator<Product>() {
+				@Override
+				public int compare(Product lhs, Product rhs)
+				{
+					return lhs.getProductName().compareTo(rhs.getProductName());
+				}
+			});
+			this.showProducts.setAdapter(productAdapter);
 		}
 	}
 	
@@ -140,13 +131,17 @@ public class ProductsListActivity extends Activity implements OnScrollListener
 			firstPosition = view.getFirstVisiblePosition();
 			lastPosition = view.getLastVisiblePosition();
 			
+			Log.d("ScrollPosition", "First: " + firstPosition + 
+									" Last: " + lastPosition);
+			
 			for ( int i = firstPosition; i <= lastPosition; i++ )
 			{
 				if ( ProductsListActivity.isNetworkAvaiable(this) )
 				{
-					ProductsViewHolder p;
-					p = (ProductsViewHolder) this.showProducts.getTag(i);
-					new GetProductsThumbTask(this, p.imgName, i);
+					Product p;
+					p = (Product) this.showProducts.getItemAtPosition(i);
+					Log.d("ImageNameScroll", "Image Name: " + p.getImageName());
+					new GetProductsThumbTask(this, p.getImageName(), i).execute();
 				}
 			}
 		}
@@ -155,6 +150,29 @@ public class ProductsListActivity extends Activity implements OnScrollListener
 	public void setThumbImage ( int position, Bitmap img )
 	{
 		Drawable d = new BitmapDrawable(img);
-		this.showProducts.getChildAt(position).setBackgroundDrawable(d);
+		try
+		{
+			ProductsViewHolder p = 
+					(ProductsViewHolder) this.showProducts.getChildAt(position).getTag();
+			p.img.setBackgroundDrawable(d);
+			Log.d("ThumbTaskInsert", "Posição: " + position);
+		}
+		catch (NullPointerException e)
+		{
+			Log.d("ThumbTaskInsert", "NULL POINTER: " + e.toString());
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+	{
+		ProductsViewHolder p = (ProductsViewHolder) arg1.getTag();
+		Intent i = new Intent(ProductsListActivity.this, Picker.class);
+		i.putExtra("imageName", p.imgName);
+		i.putExtra("productId", p.id);
+		i.putExtra("productPrice", p.amount.getText().toString());
+		i.putExtra("productName", p.name.getText().toString());
+		i.putExtra("productType", p.type);
+    	startActivity(i);
 	}
 }

@@ -2,7 +2,6 @@ package br.com.tag.mobile.persistence;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,7 +12,7 @@ import br.com.tag.mobile.model.ShopCartItem;
 
 public class DataBaseHandler extends SQLiteOpenHelper
 {
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
 	private static final String DATABASE_NAME = "ManacaMobile";
 	public static final String TABLE_COMPRA = "Compra";
 	private static final String TABLE_ITENS = "Itens";
@@ -34,9 +33,6 @@ public class DataBaseHandler extends SQLiteOpenHelper
 	private static final String UNIQUE_COLUMN_PRODUTO_ITENS = "id_produto";
 	private static final String COLUMN_QUANTIDADE = "quantidade";
 	private static final String COLUMN_VALOR_ITEM = "valor_item";
-	// Table Atualizacao
-	private static final String KEY_ID_ATUALIZACAO = "_ID";
-	private static final String COLUMN_DATA_ATUALIZACAO = "data";
 
 	public DataBaseHandler( Context context )
 	{
@@ -47,10 +43,6 @@ public class DataBaseHandler extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db)
 	{
 		String query;
-		query = "CREATE TABLE " + TABLE_ATUALIZACAO + 
-				"( " + KEY_ID_ATUALIZACAO + " INTEGER PRIMARY KEY AUTOINCREMENT, " + 
-				COLUMN_DATA_ATUALIZACAO + " TEXT)";
-		db.execSQL(query);
 		query = "CREATE TABLE " + TABLE_COMPRA + 
 				"( " + KEY_ID_COMPRA + " INTEGER PRIMARY KEY, " +
 				COLUMN_DATA_COMPRA + " TEXT, " + 
@@ -87,58 +79,6 @@ public class DataBaseHandler extends SQLiteOpenHelper
 		query = 	"DROP TABLE IF EXISTS " + TABLE_ITENS;
 		db.execSQL(query);
 		onCreate(db);
-	}
-	
-	public void insertDate ()
-	{
-		SQLiteDatabase db = this.getReadableDatabase();
-		Calendar date = Calendar.getInstance();
-		String _date =	date.get(Calendar.DAY_OF_MONTH) + "-" +
-				 		(date.get(Calendar.MONTH) + 1) + "-" + 
-				 		date.get(Calendar.YEAR);
-		db = this.getWritableDatabase();
-		
-		ContentValues insertValues = new ContentValues();
-		insertValues.put(COLUMN_DATA_ATUALIZACAO, _date);
-		
-		db.insert(TABLE_ATUALIZACAO, null, insertValues);
-		db.close();
-	}
-	
-	public void insertDate ( Calendar date )
-	{
-		SQLiteDatabase db = this.getReadableDatabase();
-		String _date =	date.get(Calendar.DAY_OF_MONTH) + "-" +
-						(date.get(Calendar.MONTH) + 1) + "-" + 
-				 		date.get(Calendar.YEAR);
-		db = this.getWritableDatabase();
-		
-		ContentValues insertValues = new ContentValues();
-		insertValues.put(COLUMN_DATA_ATUALIZACAO, _date);
-		
-		db.insert(TABLE_ATUALIZACAO, null, insertValues);
-		db.close();
-	}
-	
-	public String lastNotifySent ()
-	{
-		SQLiteDatabase db = this.getReadableDatabase();
-		String query = 	"SELECT " + COLUMN_DATA_ATUALIZACAO + " " +  
-						"FROM " + TABLE_ATUALIZACAO + " " + 
-						"ORDER BY " + KEY_ID_ATUALIZACAO + " DESC " + 
-						"LIMIT 1";
-		Cursor cursor = db.rawQuery(query, null);
-		if ( cursor.moveToFirst() )
-		{
-			String result = cursor.getString(0);
-			db.close();
-			return result;
-		}
-		else
-		{
-			db.close();
-			return null;
-		}
 	}
 	
 	public int getIncompleteCartId ()

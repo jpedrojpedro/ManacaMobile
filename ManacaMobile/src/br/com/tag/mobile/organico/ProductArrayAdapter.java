@@ -1,7 +1,6 @@
 package br.com.tag.mobile.organico;
 
 import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,7 @@ public class ProductArrayAdapter extends ArrayAdapter<Product>
 	
 	public ProductArrayAdapter ( Context context, List<Product> products )
 	{
-		super ( context, R.layout.product_row, products);
+		super ( context, R.layout.product_row, products );
 		this.context = context;
 		this.products = products;
 	}
@@ -27,45 +26,46 @@ public class ProductArrayAdapter extends ArrayAdapter<Product>
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
         ProductsViewHolder viewHolder;
+        View rowView = convertView;
         
-        if(convertView == null)
+        if(rowView == null)
         {
 			LayoutInflater inflater = 	(LayoutInflater) context.
 										getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			
-			convertView = inflater.inflate(R.layout.product_row, parent, false);
+			rowView = inflater.inflate(R.layout.product_row, parent, false);
 			
 			viewHolder = new ProductsViewHolder();
-			viewHolder.id = (TextView) convertView.findViewById(R.id.productId);
-			viewHolder.name = (TextView) convertView.findViewById(R.id.productName);
-			viewHolder.amount = (TextView) convertView.findViewById(R.id.amount);
-			viewHolder.img = (ImageView) convertView.findViewById(R.id.productImage);
+			viewHolder.name = (TextView) rowView.findViewById(R.id.productName);
+			viewHolder.amount = (TextView) rowView.findViewById(R.id.amount);
+			viewHolder.img = (ImageView) rowView.findViewById(R.id.productImage);
+			rowView.setTag(viewHolder);
         }
         else
-        	viewHolder = (ProductsViewHolder) convertView.getTag();
+        	viewHolder = (ProductsViewHolder) rowView.getTag();
 		
 		Product p = products.get(position);
 		
 		if ( p != null )
 		{
-			viewHolder.id.setText(String.valueOf(p.get_id()));
+			viewHolder.id = p.get_id();
 			viewHolder.name.setText(p.getProductName());
 			viewHolder.amount.setText(String.valueOf(p.getAmount()));
 			viewHolder.img.setBackgroundResource(R.drawable.no_image);
 			viewHolder.imgName = p.getImageName();
+			viewHolder.type = p.getProductTypeName();
 		}
 		
-		convertView.setTag(viewHolder);
-		
-		return convertView;
+		return rowView;
 	}
 	
 	static class ProductsViewHolder
 	{
-	    TextView id;
+	    int id;
 	    TextView name;
 	    TextView amount;
 	    ImageView img;
 	    String imgName;
+	    String type;
 	}
 }
