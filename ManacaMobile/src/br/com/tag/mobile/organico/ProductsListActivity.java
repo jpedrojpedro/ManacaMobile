@@ -5,6 +5,7 @@ import java.util.Comparator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import br.com.tag.mobile.httpRequest.GetProductsTask;
 import br.com.tag.mobile.httpRequest.GetProductsThumbTask;
+import br.com.tag.mobile.imgConvert.ImageToBase64;
 import br.com.tag.mobile.model.Product;
 import br.com.tag.mobile.organico.ProductArrayAdapter.ProductsViewHolder;
 import com.quietlycoding.android.picker.Picker;
@@ -35,6 +37,7 @@ public class ProductsListActivity extends Activity implements OnScrollListener,
 {
 	private ListView showProducts;
     private ArrayList<Product> products;
+    private SharedPreferences sharedPreferences;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -44,6 +47,7 @@ public class ProductsListActivity extends Activity implements OnScrollListener,
 		this.showProducts = (ListView) findViewById(R.id.listView);
 		this.showProducts.setOnScrollListener(this);
 		this.showProducts.setOnItemClickListener(this);
+		this.sharedPreferences = getSharedPreferences("ImageConversion", MODE_PRIVATE);
 		if ( isNetworkAvaiable(this) )
 		{
 			// call AsyncTask
@@ -140,8 +144,19 @@ public class ProductsListActivity extends Activity implements OnScrollListener,
 				{
 					Product p;
 					p = (Product) this.showProducts.getItemAtPosition(i);
-					Log.d("ImageNameScroll", "Image Name: " + p.getImageName());
-					new GetProductsThumbTask(this, p.getImageName(), i).execute();
+					String imgEncoded = 
+							this.sharedPreferences.getString(p.getImageName(), 
+															 "");
+					if ( imgEncoded.equals("") )
+					{
+						Log.d("ImageNameScroll", "Image Name: " + p.getImageName());
+						new GetProductsThumbTask(this, p.getImageName(), i).execute();
+					}
+					else
+					{
+						Bitmap b = ImageToBase64.decodeBase64(imgEncoded);
+						this.setThumbImage(i, b);
+					}
 				}
 			}
 		}
@@ -156,6 +171,9 @@ public class ProductsListActivity extends Activity implements OnScrollListener,
 					(ProductsViewHolder) this.showProducts.getChildAt(position).getTag();
 			p.img.setBackgroundDrawable(d);
 			Log.d("ThumbTaskInsert", "Posição: " + position);
+			SharedPreferences.Editor spEditor = this.sharedPreferences.edit();
+			String imgEncoded = ImageToBase64.encodeTobase64(img);
+			spEditor.putString(p.imgName, imgEncoded).commit();
 		}
 		catch (NullPointerException e)
 		{
