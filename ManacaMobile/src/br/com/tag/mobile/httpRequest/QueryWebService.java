@@ -67,8 +67,8 @@ public class QueryWebService
 		
 		if ( result != null )
 		{
-			Log.e("QueryWebService", "Gerou ArrayList! =)");
-			Log.e("QueryWebService", "Qtd: " + result.size());
+			Log.d("QueryWebService", "Gerou ArrayList! =)");
+			Log.d("QueryWebService", "Qtd: " + result.size());
 		}
 		else
 			Log.e("QueryWebService", "Não gerou ArrayList! =(");

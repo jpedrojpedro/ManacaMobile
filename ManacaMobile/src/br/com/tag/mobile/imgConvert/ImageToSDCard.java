@@ -9,10 +9,12 @@ import android.util.Log;
 
 public class ImageToSDCard
 {
+	private static final String IMG_DIR = "/manaca_images";
+	
 	public static void storeImage ( String imgName, Bitmap img )
 	{
 	    String root = Environment.getExternalStorageDirectory().toString();
-	    File myDir = new File(root + "/manaca_images");
+	    File myDir = new File(root + IMG_DIR);
 	    if ( !myDir.exists() )
 	    	myDir.mkdir();
 	    File file = new File (myDir, imgName);
@@ -34,9 +36,9 @@ public class ImageToSDCard
 	{
 		Bitmap b = null;
 		String root = Environment.getExternalStorageDirectory().toString();
-	    File myDir = new File(root + "/manaca_images");
+	    File myDir = new File(root + IMG_DIR);
 	    File file = new File (myDir, imgName);
-	    String absPath = root + "/manaca_images/" + imgName;
+	    String absPath = root + IMG_DIR + imgName;
 	    if (file.exists ())
 	    	b = BitmapFactory.decodeFile(absPath);
 	    return b;

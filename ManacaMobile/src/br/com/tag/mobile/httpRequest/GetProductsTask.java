@@ -28,7 +28,7 @@ public class GetProductsTask extends AsyncTask<Void, Void, ArrayList<Product>>
 			{
 				onlyAvaiable.remove(i);
 				i--;
-				Log.e("Removido Produto", "Produto: " + p.get_id());
+				Log.d("Removido Produto", "Produto: " + p.get_id());
 			}
 		}
 		return onlyAvaiable;

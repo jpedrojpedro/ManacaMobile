@@ -14,14 +14,14 @@ public class ProductArrayAdapter extends ArrayAdapter<Product>
 {
 	private final Context context;
 	private final List<Product> products;
-	
+
 	public ProductArrayAdapter ( Context context, List<Product> products )
 	{
 		super ( context, R.layout.product_row, products );
 		this.context = context;
 		this.products = products;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
@@ -32,9 +32,9 @@ public class ProductArrayAdapter extends ArrayAdapter<Product>
         {
 			LayoutInflater inflater = 	(LayoutInflater) context.
 										getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			
+
 			rowView = inflater.inflate(R.layout.product_row, parent, false);
-			
+
 			viewHolder = new ProductsViewHolder();
 			viewHolder.name = (TextView) rowView.findViewById(R.id.productName);
 			viewHolder.amount = (TextView) rowView.findViewById(R.id.amount);
@@ -43,9 +43,9 @@ public class ProductArrayAdapter extends ArrayAdapter<Product>
         }
         else
         	viewHolder = (ProductsViewHolder) rowView.getTag();
-		
-		Product p = products.get(position);
-		
+
+		Product p = this.products.get(position);
+
 		if ( p != null )
 		{
 			viewHolder.id = p.get_id();
@@ -55,10 +55,10 @@ public class ProductArrayAdapter extends ArrayAdapter<Product>
 			viewHolder.imgName = p.getImageName();
 			viewHolder.type = p.getProductTypeName();
 		}
-		
+
 		return rowView;
 	}
-	
+
 	static class ProductsViewHolder
 	{
 	    int id;

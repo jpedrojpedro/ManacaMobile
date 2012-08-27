@@ -35,10 +35,6 @@
             android:theme="@android:style/Theme.Dialog"
             android:label="@string/quantity">
         </activity>
-        <service
-            android:name="br.com.tag.mobile.service.UpdateInformation"
-            android:process=".get_information_manaca" >
-        </service>
     </application>
 
 </manifest>
